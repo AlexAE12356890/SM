@@ -26,5 +26,11 @@ public class GroundSensor : MonoBehaviour
         {
             isGrounded = false;
         }
+    
+
+        if(collision.gameObject.layer == 7)
+        {
+            Destroy(collision.gameObject);
+        }
     }
 }
