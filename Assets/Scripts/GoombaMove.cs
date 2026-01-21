@@ -7,10 +7,19 @@ public class GoombaMove : MonoBehaviour
     public float movementSpeed = 5f;
     public int direction = 1;
     public Rigidbody2D rBody2D;
-    
+    private AudioSource _audioSource;
+    public AudioClip deathSFX;
+    private BoxCollider2D _boxCollider;
+    private Animator _animator;
+    private GameManager _gameManager;
+
     void Awake()
     {
         rBody2D = GetComponent<Rigidbody2D>();
+        _audioSource = GetComponent<AudioSource>();
+        _boxCollider = GetComponent<BoxCollider2D>();
+        _animator = GetComponent<Animator>();
+        _gameManager = GameObject.Find ("GameManager").GetComponent<GameManager>();
     }
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -21,7 +30,6 @@ public class GoombaMove : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
     }
 
     void FixedUpdate()
@@ -42,5 +50,23 @@ public class GoombaMove : MonoBehaviour
         {
             Destroy(collision.gameObject);
         }
+    }
+
+    public void GoombaDeath()
+    {
+        _gameManager.AddKill();
+        
+        _audioSource.PlayOneShot(deathSFX);
+
+        movementSpeed = 0;
+
+        _boxCollider.enabled = false;
+
+        Destroy(gameObject, 0.5f);
+
+        
+
+        //_audioSource.clip = deathSFX; alternativa para reproducir
+        //_audioSource.Play(deathSFX); util para poner la musiquita
     }
 }
