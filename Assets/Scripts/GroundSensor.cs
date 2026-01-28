@@ -25,7 +25,6 @@ public class GroundSensor : MonoBehaviour
             _enemyScript.GoombaDeath();
 
             _playerScript.Bounce();
-
         }
     }
 

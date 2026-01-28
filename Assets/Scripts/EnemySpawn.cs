@@ -1,32 +1,47 @@
 using UnityEngine;
+using System.Collections;
 
 public class EnemySpawn : MonoBehaviour
 {
-    public GameObject enemyPrefab;
+    public GameObject[] enemyPrefab;
 
-    public Transform spawnPoint;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public Transform[] spawnPoints;
+
+    public int enemiesToSpawn = 5;
+    
+    private BoxCollider2D _boxCollider;
+
+    void Awake()
     {
-        
+        _boxCollider = GetComponent<BoxCollider2D>();
     }
 
-    // Update is called once per frame
-    void Update()
+    /*void SpawnEnemy()
     {
-        
-    }
-
-    void SpawnEnemy()
+        for (int i = 0; i < enemiesToSpawn; i++)
+         {
+            Instantiate(enemyPrefab, spawnPoint.position, Quaternion.identity);
+        }
+    }*/
+    
+    IEnumerator SpawnEnemy()
     {
-        Instantiate(enemyPrefab, spawnPoint.position, Quaternion.identity);
+        for (int i = 0; i < enemiesToSpawn; i++)
+        {
+            foreach (Transform item in spawnPoints)
+            {
+                Instantiate(enemyPrefab[Random.Range(0, enemyPrefab.Length)], item.position, Quaternion.identity);
+            }
+            yield return new WaitForSeconds(0.5f);
+        }
     }
     
     void OnTriggerEnter2D (Collider2D collision)
     {
         if(collision.gameObject.CompareTag("Player"))
         {
-            SpawnEnemy();
+            _boxCollider.enabled = false;
+            StartCoroutine(SpawnEnemy());
         }
     }
 }

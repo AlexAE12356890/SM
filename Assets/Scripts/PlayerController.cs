@@ -34,6 +34,16 @@ public class PlayerController : MonoBehaviour
         jumpAction = InputSystem.actions["Jump"];
     }
 
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        if(collision.gameObject.layer == 8)
+        {
+            Destroy(collision.gameObject);
+            CoinManager _coinScript;
+            _coinScript = collision.gameObject.GetComponent<CoinManager>();
+        }
+    }
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
