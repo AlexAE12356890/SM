@@ -50,9 +50,8 @@ public class GoombaMove : MonoBehaviour
 
         if(collision.gameObject.CompareTag("Player"))
         {
-            
+            _audioSource.PlayOneShot(MdeathSFX);
             Destroy(collision.gameObject);
-
         }
     }
 

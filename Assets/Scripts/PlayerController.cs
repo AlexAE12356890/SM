@@ -23,6 +23,7 @@ public class PlayerController : MonoBehaviour
 
     private Animator animator;
     
+    public AudioClip WInFlagSFX;
     public AudioClip jumpSFX;
     private AudioSource _audioSource;
 
@@ -45,6 +46,12 @@ public class PlayerController : MonoBehaviour
             CoinManager _coinScript;
             _coinScript = collision.gameObject.GetComponent<CoinManager>();
             _coinScript.Cointaker();
+        }
+
+        if(collision.gameObject.CompareTag("WInFlag"))
+        {
+            _audioSource.PlayOneShot(WInFlagSFX);
+            this.enabled = false;
         }
     }
 

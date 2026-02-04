@@ -3,32 +3,36 @@ using UnityEngine;
 public class BGMManager : MonoBehaviour
 {
     public AudioClip gameMusic;
-
     private AudioSource _audioSource;
+    private GameObject player;
+    private bool isStopped = false;
 
     void Awake()
     {
         _audioSource = GetComponent<AudioSource>();
     }
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+
     void Start()
     {
-        StartBGM();
+        player = GameObject.FindWithTag("Player");
+        _audioSource.clip = gameMusic;
+        _audioSource.loop = true;
+        _audioSource.Play();
     }
 
-    // Update is called once per frame
     void Update()
     {
-        
+        if (isStopped) return;
+
+        if (player == null || !player.GetComponent<PlayerController>().enabled)
+        {
+            StopBGM();
+        }
     }
 
-    void StartBGM()
+    void StopBGM()
     {
-        _audioSource.loop = true;
-        _audioSource.clip = gameMusic;
-        _audioSource.Play();
-
-        //_audioSource.Pause();
-        //_audioSource.Stop();
+        _audioSource.Stop();
+        isStopped = true;
     }
 }
