@@ -9,6 +9,7 @@ public class GoombaMove : MonoBehaviour
     public Rigidbody2D rBody2D;
     private AudioSource _audioSource;
     public AudioClip deathSFX;
+    public AudioClip MdeathSFX;
     private BoxCollider2D _boxCollider;
     private Animator _animator;
     private GameManager _gameManager;
@@ -49,7 +50,9 @@ public class GoombaMove : MonoBehaviour
 
         if(collision.gameObject.CompareTag("Player"))
         {
+            
             Destroy(collision.gameObject);
+
         }
     }
 

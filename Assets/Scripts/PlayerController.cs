@@ -22,6 +22,9 @@ public class PlayerController : MonoBehaviour
     private GroundSensor sensor;
 
     private Animator animator;
+    
+    public AudioClip jumpSFX;
+    private AudioSource _audioSource;
 
     void Awake()
     {
@@ -29,6 +32,7 @@ public class PlayerController : MonoBehaviour
         render = GetComponent<SpriteRenderer>();
         sensor = GetComponentInChildren<GroundSensor>();
         animator = GetComponent<Animator>();
+        _audioSource = GetComponent<AudioSource>();
 
         moveAction = InputSystem.actions["Move"];
         jumpAction = InputSystem.actions["Jump"];
@@ -38,9 +42,9 @@ public class PlayerController : MonoBehaviour
     {
         if(collision.gameObject.layer == 8)
         {
-            Destroy(collision.gameObject);
             CoinManager _coinScript;
             _coinScript = collision.gameObject.GetComponent<CoinManager>();
+            _coinScript.Cointaker();
         }
     }
 
@@ -86,6 +90,7 @@ public class PlayerController : MonoBehaviour
         if(jumpAction.WasPressedThisFrame() && sensor.isGrounded)
         {
             rBody2D.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+            _audioSource.PlayOneShot(jumpSFX);
         }
 
         animator.SetBool("IsJumping", !sensor.isGrounded);
