@@ -1,4 +1,6 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using System.Collections;
 
 public class GoombaMove : MonoBehaviour
 {
@@ -13,6 +15,7 @@ public class GoombaMove : MonoBehaviour
     private BoxCollider2D _boxCollider;
     private Animator _animator;
     private GameManager _gameManager;
+    private bool marioMuerto = false;
 
     void Awake()
     {
@@ -20,15 +23,14 @@ public class GoombaMove : MonoBehaviour
         _audioSource = GetComponent<AudioSource>();
         _boxCollider = GetComponent<BoxCollider2D>();
         _animator = GetComponent<Animator>();
-        _gameManager = GameObject.Find ("GameManager").GetComponent<GameManager>();
+        _gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
     }
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+
     void Start()
     {
     
     }
 
-    // Update is called once per frame
     void Update()
     {
         
@@ -48,11 +50,25 @@ public class GoombaMove : MonoBehaviour
             direction *=-1;
         }
 
-        if(collision.gameObject.CompareTag("Player"))
+        if(collision.gameObject.CompareTag("Player") && !marioMuerto)
         {
-            _audioSource.PlayOneShot(MdeathSFX);
-            Destroy(collision.gameObject);
+            StartCoroutine(SecuenciaMuerteMario(collision.gameObject));
         }
+    }
+
+    IEnumerator SecuenciaMuerteMario(GameObject mario)
+    {
+        marioMuerto = true;
+        _audioSource.PlayOneShot(MdeathSFX);
+
+        mario.GetComponent<SpriteRenderer>().enabled = false; 
+        mario.GetComponent<MonoBehaviour>().enabled = false;
+        
+        movementSpeed = 0;
+
+        yield return new WaitForSeconds(3f);
+
+        SceneManager.LoadScene("GameOver");
     }
 
     public void GoombaDeath()
@@ -66,8 +82,6 @@ public class GoombaMove : MonoBehaviour
         _boxCollider.enabled = false;
 
         Destroy(gameObject, 0.5f);
-
-        
 
         //_audioSource.clip = deathSFX; alternativa para reproducir
         //_audioSource.Play(deathSFX); util para poner la musiquita
