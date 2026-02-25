@@ -10,5 +10,6 @@ public class SceneLoader : MonoBehaviour
     void Test()
     {
         ChangeScene("Lvl.1");
+        ChangeScene("Main Menu");
     }
 }
